@@ -1,3 +1,4 @@
+import { EmbedSDK } from '@epnsproject/frontend-sdk-staging'
 import { Trans } from '@lingui/macro'
 import useScrollPosition from '@react-hook/window-scroll'
 import { CHAIN_INFO } from 'constants/chainInfo'
@@ -5,6 +6,7 @@ import { SupportedChainId } from 'constants/chains'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import useTheme from 'hooks/useTheme'
 import { darken } from 'polished'
+import { useEffect } from 'react'
 import { NavLink } from 'react-router-dom'
 import { Text } from 'rebass'
 import { useShowClaimPopup, useToggleSelfClaimModal } from 'state/application/hooks'
@@ -22,6 +24,7 @@ import Menu from '../Menu'
 import Row from '../Row'
 import { Dots } from '../swap/styleds'
 import Web3Status from '../Web3Status'
+import BellIcon from './BellIcon'
 import HolidayOrnament from './HolidayOrnament'
 import NetworkSelector from './NetworkSelector'
 
@@ -267,6 +270,24 @@ export default function Header() {
     nativeCurrency: { symbol: nativeCurrencySymbol },
   } = CHAIN_INFO[chainId ? chainId : SupportedChainId.MAINNET]
 
+  useEffect(() => {
+    if (account) {
+      EmbedSDK.init({
+        headerText: 'UniSwap ❤️ EPNS', // optional
+        targetID: 'sdk-trigger-id', // mandatory
+        appName: 'consumerApp', // mandatory
+        user: account, // mandatory
+        viewOptions: {
+          type: 'sidebar', // optional [default: 'sidebar', 'modal']
+          showUnreadIndicator: true, // optional
+          unreadIndicatorColor: '#cc1919',
+          unreadIndicatorPosition: 'top-right',
+        },
+        theme: 'light',
+      })
+    }
+  }, [account])
+
   return (
     <HeaderFrame showBackground={scrollY > 45}>
       <ClaimModal />
@@ -305,6 +326,11 @@ export default function Header() {
       </HeaderLinks>
 
       <HeaderControls>
+        <HeaderElement>
+          <div id="sdk-trigger-id" style={{ zIndex: 99999 }}>
+            <BellIcon />
+          </div>
+        </HeaderElement>
         <HeaderElement>
           <NetworkSelector />
         </HeaderElement>

@@ -56,6 +56,7 @@ import { calculateGasMargin } from '../../utils/calculateGasMargin'
 import { currencyId } from '../../utils/currencyId'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
 import { Dots } from '../Pool/styleds'
+import EPNSOptIn from './EPNSOptIn'
 import { Review } from './Review'
 import {
   CurrencyDropdown,
@@ -540,6 +541,10 @@ export default function AddLiquidity({
                 ) : null}
               </Row>
             )}
+
+            <Row>
+              <EPNSOptIn />
+            </Row>
           </AddRemoveTabs>
           <Wrapper>
             <ResponsiveTwoColumns wide={!hasExistingPosition}>
